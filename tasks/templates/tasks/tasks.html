@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Tasks</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-green-100 to-green-200 min-h-screen flex flex-col">
+
+<!-- NAVBAR -->
+<nav class="bg-white shadow-lg border-b sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+
+    <a href="{% url 'home' %}" class="text-2xl font-bold text-green-600 hover:text-green-800 transition">
+      To-Do List
+    </a>
+
+    <div class="flex space-x-4 items-center">
+      <a href="{% url 'home' %}" class="text-gray-700 hover:text-green-600 font-medium">
+        Home
+      </a>
+
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="text-red-600 font-medium">
+          Logout
+        </button>
+      </form>
+    </div>
+
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="flex-grow flex justify-center items-start pt-10 px-4">
+
+  <div class="w-full max-w-3xl bg-white p-8 rounded-2xl shadow-xl">
+
+    <h2 class="text-2xl font-bold mb-6 text-green-600 text-center">
+      Manage Tasks 🚀
+    </h2>
+
+
+    <!-- ➕ ADD TASK -->
+    <div class="space-y-4 mb-8">
+
+      <input id="title" placeholder="Task title"
+        class="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400">
+
+      <textarea id="description" placeholder="Description"
+        class="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"></textarea>
+
+      <div class="flex gap-3">
+        <select id="priority" class="border p-3 rounded-lg w-1/2">
+          <option>High</option>
+          <option selected>Medium</option>
+          <option>Low</option>
+        </select>
+
+        <input type="date" id="due_date" class="border p-3 rounded-lg w-1/2">
+      </div>
+
+      <button onclick="addTask()"
+        class="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition">
+        Add Task
+      </button>
+
+    </div>
+
+    <!-- 📋 TASK LIST -->
+    <ul id="taskList" class="space-y-4">
+
+      {% for task in tasks %}
+      <li class="bg-gray-50 p-4 rounded-lg shadow-sm flex justify-between items-start hover:shadow-md transition">
+
+        <div class="flex-1">
+          <p class="font-semibold text-gray-800 {% if task.completed %}line-through text-gray-400{% endif %}">
+            {{ task.title }}
+          </p>
+
+          {% if task.description %}
+          <p class="text-sm text-gray-500 mt-1">
+            {{ task.description }}
+          </p>
+          {% endif %}
+
+          <p class="text-xs mt-2 text-gray-600">
+            🔴 {{ task.priority }} | 📅 {{ task.due_date|default:"No date" }}
+          </p>
+        </div>
+
+        <div class="flex gap-2 ml-4">
+          <a href="{% url 'toggle' task.id %}"
+             class="bg-green-500 px-3 py-1 text-white rounded hover:bg-green-600">
+            ✔
+          </a>
+
+          <a href="{% url 'delete' task.id %}"
+             class="bg-red-500 px-3 py-1 text-white rounded hover:bg-red-600">
+            ✖
+          </a>
+        </div>
+
+      </li>
+      {% empty %}
+        <p class="text-center text-gray-500">No tasks yet 😴</p>
+      {% endfor %}
+
+    </ul>
+
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="bg-gray-800 text-center py-4 text-gray-300 mt-10">
+  <p class="text-sm">&copy; <span id="year"></span> To Do List</p>
+</footer>
+
+<!-- ⚡ AJAX -->
+<script>
+function addTask() {
+  fetch("{% url 'add_task_ajax' %}", {
+    method: "POST",
+    headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    body: new URLSearchParams({
+      title: document.getElementById("title").value,
+      description: document.getElementById("description").value,
+      priority: document.getElementById("priority").value,
+      due_date: document.getElementById("due_date").value
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    location.reload();
+  });
+}
+
+// footer year
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>

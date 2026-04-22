@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reset Password</title>
+  <link rel="icon" href="{% static 'analyzer/images/logo.avif' %}">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-slate-100 to-slate-200 min-h-screen flex items-center justify-center p-6">
+
+<div class="w-full max-w-sm bg-white/90 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-gray-100">
+
+  <h2 class="text-2xl font-bold text-center mb-6 text-indigo-600">
+    Reset Your Password
+  </h2>
+
+  <form method="POST" class="space-y-4">
+    {% csrf_token %}
+
+    <!-- USERNAME -->
+    <input type="text" name="identifier" placeholder="Enter Username or Email"
+      class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400" required>
+
+    <!-- NEW PASSWORD -->
+    <div class="relative">
+      <input id="new_password" type="password" name="new_password"
+        placeholder="New Password"
+        class="w-full p-3 border rounded-lg pr-12 focus:outline-none focus:ring-2 focus:ring-indigo-400" required>
+
+      <button type="button" onclick="togglePassword('new_password','eyeOpen1','eyeClosed1')"
+        class="absolute inset-y-0 right-3 flex items-center text-gray-500">
+
+        <svg id="eyeOpen1" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7
+               -1.274 4.057-5.064 7-9.542 7c-4.477 0-8.268-2.943-9.542-7z"/>
+        </svg>
+
+        <!-- Eye Closed -->
+          <svg id="eyeClosed1" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M2.458 12C3.732 7.943 7.523 5 12 5
+                 c4.478 0 8.268 2.943 9.542 7
+                 -1.274 4.057-5.064 7-9.542 7
+                 -4.477 0-8.268-2.943-9.542-7z"/>
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 3l18 18"/>
+          </svg>
+      </button>
+    </div>
+
+    <!-- CONFIRM PASSWORD -->
+    <div class="relative">
+      <input id="confirm_password" type="password" name="confirm_password"
+        placeholder="Confirm Password"
+        class="w-full p-3 border rounded-lg pr-12 focus:outline-none focus:ring-2 focus:ring-indigo-400" required>
+
+      <button type="button" onclick="togglePassword('confirm_password','eyeOpen2','eyeClosed2')"
+        class="absolute inset-y-0 right-3 flex items-center text-gray-500">
+
+        <svg id="eyeOpen2" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7
+               -1.274 4.057-5.064 7-9.542 7c-4.477 0-8.268-2.943-9.542-7z"/>
+        </svg>
+
+        <!-- Eye Closed -->
+          <svg id="eyeClosed2" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M2.458 12C3.732 7.943 7.523 5 12 5
+                 c4.478 0 8.268 2.943 9.542 7
+                 -1.274 4.057-5.064 7-9.542 7
+                 -4.477 0-8.268-2.943-9.542-7z"/>
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 3l18 18"/>
+          </svg>
+      </button>
+    </div>
+
+    <button type="submit"
+      class="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-700 transition">
+      Update Password
+    </button>
+  </form>
+  <p class="mt-6 text-center text-sm text-gray-500">
+  Remember your password?
+  <a href="{% url 'login' %}" class="text-green-600 font-medium hover:underline">
+    Back to Login
+  </a>
+</p>
+</div>
+
+<script>
+function togglePassword(inputId, openEyeId, closedEyeId) {
+  const input = document.getElementById(inputId);
+  const openEye = document.getElementById(openEyeId);
+  const closedEye = document.getElementById(closedEyeId);
+
+  if (input.type === "password") {
+    input.type = "text";
+    openEye.classList.add("hidden");
+    closedEye.classList.remove("hidden");
+  } else {
+    input.type = "password";
+    openEye.classList.remove("hidden");
+    closedEye.classList.add("hidden");
+  }
+}
+</script>
+
+</body>
+</html>

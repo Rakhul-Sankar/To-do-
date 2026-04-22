@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Smooth Card Animation -->
+  <script>
+tailwind.config = {
+  theme: {
+    extend: {
+      keyframes: {
+        fadeIn: { '0%': { opacity: 0, transform: 'translateY(10px)' },
+                  '100%': { opacity: 1, transform: 'translateY(0)' } }
+      },
+      animation: { 'fade-in': 'fadeIn 0.5s ease-out' }
+    }
+  }
+}
+</script>
+</head>
+
+<body class="bg-gradient-to-br from-green-100 to-green-200 min-h-screen">
+
+<!-- NAVBAR -->
+<nav class="bg-white shadow-lg border-b sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+
+   <a href="{% url 'home' %}" class="text-2xl font-bold text-green-600 hover:text-green-800 transition">
+  To-Do List
+</a>
+
+
+    <!-- Desktop Menu -->
+     <div class="hidden md:flex space-x-4 items-center">
+      <a href="{% url 'tasks' %}" class="text-gray-700 hover:text-blue-600 font-medium px-3 py-2">Tasks</a>
+     
+      <!-- ✅ Proper Django Logout -->
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="text-red-600 font-medium px-3 py-2">
+          Logout
+        </button>
+      </form>
+    </div>
+</nav>
+
+<!-- ================= MAIN ================= -->
+<main class="max-w-5xl mx-auto px-6 py-12">
+
+  <!-- Greeting Card -->
+  <div class="bg-white p-6 rounded-2xl shadow-md mb-8 text-center">
+    <h2 class="text-3xl font-bold text-green-600">
+      {{ greeting }} {{ request.user.first_name|default:request.user.username|capfirst }} 
+    </h2>
+    <p class="text-gray-500 mt-2">
+      Stay organized and boost your productivity today 🚀
+    </p>
+  </div>
+
+  <!-- Features Grid -->
+  <div class="grid md:grid-cols-2 gap-6">
+
+    <!-- Card 1 -->
+    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+      <h3 class="text-lg font-semibold text-green-600 mb-2">📋 Task Management</h3>
+      <p class="text-gray-600">
+        Add, update, and delete tasks easily. Keep everything organized in one place.
+      </p>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+      <h3 class="text-lg font-semibold text-green-600 mb-2">✅ Completion Tracking</h3>
+      <p class="text-gray-600">
+        Mark tasks as completed and stay focused on what matters most.
+      </p>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+      <h3 class="text-lg font-semibold text-green-600 mb-2">🔐 Secure Access</h3>
+      <p class="text-gray-600">
+        Your tasks are محفوظ with login authentication and user-specific data.
+      </p>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+      <h3 class="text-lg font-semibold text-green-600 mb-2">⚡ Fast & Responsive</h3>
+      <p class="text-gray-600">
+        Built with Tailwind CSS for smooth, responsive and modern UI experience.
+      </p>
+    </div>
+
+  </div>
+
+</main>
+
+
+<!-- ================= FOOTER ================= --> 
+ <footer class="bg-gray-800 text-center py-6 text-gray-300"> 
+  <p class="text-sm">&copy; <span id="year"></span> To Do List. All rights reserved.</p>
+ </footer>
+ 
+<script>
+function toggleMenu() {
+  document.getElementById("mobileMenu").classList.toggle("hidden");
+}
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
